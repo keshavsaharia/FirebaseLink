@@ -18,7 +18,7 @@ fb = Firebase["firebaselink/foo"]
 (* fb points to https://firebaselink.firebaseio.com/foo/bar/baz *)
 fb = Firebase[{"firebaselink", "foo", "bar", "baz"}] 
 ```
-Just like the JavaScript Firebase library, creating a Firebase symbol is a very lightweight operation, so it can be called in a mapping or large iteration. To write to the Firebase (or child of the Firebase):
+Just like the JavaScript Firebase library, creating a Firebase symbol is a very lightweight operation, so it can be called in a mapping or large iteration. To write to a location:
 
 ```Mathematica
 FirebaseWrite[fb, "foo"]
