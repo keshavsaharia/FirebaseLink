@@ -8,15 +8,17 @@ The easiest way to get started is to open FirebaseLink.m with Mathematica and ev
 ```Mathematica
 Get["Firebase`FirebaseLink`"]
 ```
-FirebaseLink uses a REST API detailed in the [Firebase documentation](https://firebase.com/docs). It wraps functionality around the ```Firebase``` symbol.
+FirebaseLink uses a REST API detailed in the [Firebase documentation](https://firebase.com/docs). It wraps functionality around the ```Firebase``` symbol. It simplifies the longer URL (__x__.firebaseio.com/__y__) to just the prefix ```x``` and the Firebase path ```y```.
 
 ```Mathematica
-fb = Firebase["firebaselink"] (* Corresponds to https://firebaselink.firebaseio.com *)
-child = Firebase["firebaselink/foo"] (* Corresponds to https://firebaselink.firebaseio.com/foo *)
-example = Firebase[{"firebaselink", "foo", "bar", "baz"}] (* Corresponds to https://firebaselink.firebaseio.com/foo/bar/baz *)
+(* fb points to https://firebaselink.firebaseio.com *)
+fb = Firebase["firebaselink"] 
+(* fb points to https://firebaselink.firebaseio.com/foo *)
+fb = Firebase["firebaselink/foo"]
+(* fb points to https://firebaselink.firebaseio.com/foo/bar/baz *)
+fb = Firebase[{"firebaselink", "foo", "bar", "baz"}] 
 ```
-
-Then, to write to the Firebase (or child of the Firebase):
+Just like the JavaScript Firebase library, creating a Firebase symbol is a very lightweight operation, so it can be called in a mapping or large iteration. To write to the Firebase (or child of the Firebase):
 
 ```Mathematica
 FirebaseWrite[fb, "foo"]
