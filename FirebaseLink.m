@@ -1,8 +1,6 @@
 BeginPackage["Firebase`FirebaseLink`"];
 
-Firebase::usage = "Firebase[path] is a symbolic representation of a Firebase.";
-FirebaseAuthenticate::usage = "FirebaseAuthenticate[token] authenticates this client with the given Firebase secret token.";
-FirebaseUnauthenticate::usage = "FirebaseUnauthenticate[] removes the current authentication token.";
+Firebase::usage = "Firebase[name, secret] is a symbolic representation of a Firebase with the given name and secret key.";
 FirebaseURL::usage = "Returns the URL corresponding to the symbolic Firebase.";
 
 FirebasePush::usage = "FirebasePush[firebase, data] and FirebasePush[firebase, path, data] pushes the data at the corresponding Firebase location.";
@@ -38,16 +36,13 @@ CurlEscape[data_] :=
 	If[NumberQ[data], ToString[data], 
 	If[ListQ[data],StringReplace[ExportString[data,"JSON"],
 		(""|Whitespace..)~~("\t"|"\n")~~(""|Whitespace..)->""]]]]
-
-FirebaseAuthenticate[token_] := ($FirebaseToken = token);
-FirebaseUnauthenticate[token_] := ($FirebaseToken = 0);
 FirebaseURL[firebase_] :=
 	If[StringQ[firebase], firebase, 
 		If[ListQ[First[firebase]], 
-			FirebaseURL[Firebase[FileNameJoin[First[firebase]]]],
+			FirebaseURL[Firebase[FileNameJoin[First[firebase]],Last[firebase]]],
 			"https://"<> FileNameTake[First[firebase], 1]<>".firebaseio.com/" <> 
-				FileNameDrop[First[firebase], 1]<>"/.json"<>
-		If[StringQ[$FirebaseToken],"?auth=" <> $FirebaseToken, ""]]]
+				If[FileNameDepth[First[firebase]] > 1, FileNameDrop[First[firebase], 1]<>"/",""]<>".json"<>
+		If[Length[firebase]==2,"?auth=" <> Last[firebase], ""]]]
 FirebasePush[firebase_, data_] := CurlPost[data, FirebaseURL[firebase]]
 FirebasePush[firebase_, path_, data_] := CurlPost[data, FirebaseURL[FirebaseChild[firebase, path]]]
 FirebaseWrite[firebase_, data_] := CurlPut[data, FirebaseURL[firebase]]
@@ -59,8 +54,8 @@ FirebaseDelete[firebase_, path_] := CurlDelete[FirebaseURL[FirebaseChild[firebas
 
 FirebaseRead[firebase_] := CurlGet[FirebaseURL[firebase]]
 FirebaseRead[firebase_, path_] := CurlGet[FirebaseURL[FirebaseChild[firebase, path]]]
-FirebaseChild[firebase_, child_] := Firebase[FileNameJoin[{First[firebase], child}]]
-FirebaseParent[firebase_] := Firebase[FileNameDrop[First[firebase], -1]]
+FirebaseChild[firebase_, child_] := Firebase[FileNameJoin[{First[firebase], child}],Last[firebase]]
+FirebaseParent[firebase_] := Firebase[FileNameDrop[First[firebase], -1],Last[firebase]]
 
 End[];
 EndPackage[];
