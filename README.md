@@ -2,12 +2,12 @@ FirebaseLink
 ============
 FirebaseLink is a symbolic interface to [Firebase](https://firebase.com) from [Mathematica](http://wolfram.com). 
 
-The easiest way to get started is to open FirebaseLink.m with Mathematica and evaluate it. You can also load it in by creating a folder with ```mkdir Mathematica.app/AddOns/ExtraPackages/Firebase``` and moving FirebaseLink.m to it.
+The easiest way to get started is to open FirebaseLink.m with Mathematica and evaluate it. You can also load it in by creating a folder with ```mkdir Mathematica.app/AddOns/ExtraPackages/Firebase```, moving FirebaseLink.wl to it, and doing a `Get` on the package path.
 
 ```Mathematica
 Get["Firebase`FirebaseLink`"]
 ```
-FirebaseLink uses a REST API detailed in the [Firebase documentation](https://firebase.com/docs). It wraps functionality around the ```Firebase``` symbol. It simplifies the longer URL (__x__.firebaseio.com/__y__) to just the prefix ```x``` and the Firebase path ```y```.
+FirebaseLink uses the REST API described in the [Firebase documentation](https://firebase.com/docs). The ```Firebase``` symbol is used to symbolically represent a Firebase with a given authentication token or secret key. It simplifies the longer URL (__x__.firebaseio.com/__y__) to just the prefix ```x``` and the Firebase path ```y```.
 
 ```Mathematica
 (* fb points to https://firebaselink.firebaseio.com *)
@@ -18,11 +18,11 @@ fb = Firebase["firebaselink/foo"]
 fb = Firebase[{"firebaselink", "foo", "bar", "baz"}] 
 ```
 
-In case you're using security rules, you can give Mathematica full read/write privileges to the Firebase using ```FirebaseAuthenticate```.
-
-```Mathematica
-FirebaseAuthenticate["..... secret key ....."]
+The optional second parameter is the authentication token or secret key.
 ```
+Firebase["firebaselink", "z897vasdj2k3j98y98yw8923hsklf..."]
+```
+The authentication token or secret key is necessary if you are using security rules on your Firebase. If you are just using a Firebase for a personal project and aren't too concerned about people stealing/vandalizing your data, you can leave out the authentication.
 
 Creating a Firebase symbol is a lightweight operation, so it can be called in a mapping or large iteration. To write to a location:
 
@@ -92,4 +92,4 @@ fb.once('value', function(snap) {
 
 License
 ===
-Do whatever you want with this. Email me a beer if it was helpful: [keshav@keshavsaharia.com](mailto:keshav@keshavsaharia.com)
+Do whatever you want with this. Email me a beer if it was helpful: [where@keshav.is](mailto:where@keshav.is)
