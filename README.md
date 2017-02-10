@@ -58,14 +58,12 @@ Suppose you need to provide your web visitors with your company's most up-to-dat
 Here's how to get it done in 5 minutes with FirebaseLink.
 
 1. Set up a Firebase. Refer [here](https://firebase.com/docs) if you don't know how to do this.
-2. Get the Firebase's secret key (under the simple login tab).
-3. Change the security rules so the Firebase can't be written to without the secret key (in the security rules tab). This is done by simply changing ".write" to false.
-
+2. Make the Firebase publicly readable and writeable by editing the database rules to be:
 ```
 {
     "rules": {
         ".read": true,
-        ".write": false
+        ".write": true
     }
 }
 ```
@@ -74,7 +72,6 @@ Here's how to get it done in 5 minutes with FirebaseLink.
 
 ```
 fb = Firebase["example"]
-FirebaseAuthenticate[" secret key from step 2 "]
 FirebaseWrite[fb, FinancialData["GOOG"]]
 ```
 
@@ -88,8 +85,15 @@ fb.once('value', function(snap) {
 });
 ```
 
-6. Put the 55 minutes you saved into the bank.
+## Authentication tokens
+
+If you generate a Firebase token to use with your database, you can pass it as the second parameter to `Firebase`.
+
+```mathematica
+secure = Firebase["name", "auth token"];
+FirebaseRead[secure]
+```
 
 License
 ===
-Do whatever you want with this. Email me a beer if it was helpful: [where@keshav.is](mailto:where@keshav.is)
+Do whatever you want with this. Email me a beer if it was helpful: [keshav@keshav.is](mailto:keshav@keshav.is)
