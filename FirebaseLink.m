@@ -20,11 +20,21 @@ Begin["`Private`"];
 
 $FirebaseToken = 0;
 $FirebaseCurlBuffer = CreateTemporary[];
-CurlRequest[verb_, data_, url_] := If[$FirebaseUseBuffer,
-	Export[$FirebaseCurlBuffer, data, "JSON"];
-	Import["!curl -X "<>verb<>" -H 'Content-type:application/json' --data @"<> $FirebaseCurlBuffer <> " '"<> url <>"'", "JSON"],
-	Import["!curl -X "<>verb<>" -H 'Content-type:application/json' -d '"<> CurlEscape[data] <> "' '"<> url <>"'", "JSON"]
+
+CurlRequest[verb_,data_,url_]:=
+If[$OperatingSystem == "Windows",
+If[$FirebaseUseBuffer,
+Export[$FirebaseCurlBuffer,data,"JSON"];
+Run["curl -X "<>verb<>" -H 'Content-type:application/json' --data @"<>$FirebaseCurlBuffer<>" "<>url<>" ","JSON"],
+Run["curl -X "<>verb<>" -H 'Content-type:application/json' -d '"<>CurlEscape[data]<>"' "<>url<>" ","JSON"]
+],
+If[$FirebaseUseBuffer,
+Export[$FirebaseCurlBuffer, data, "JSON"];
+Import["!curl -X "<>verb<>" -H 'Content-type:application/json' --data @"<> $FirebaseCurlBuffer <> " '"<> url <>"'", "JSON"],
+Import["!curl -X "<>verb<>" -H 'Content-type:application/json' -d '"<> CurlEscape[data] <> "' '"<> url <>"'", "JSON"]
+];
 ]
+
 CurlPost[data_, url_] := CurlRequest["POST", data, url]
 CurlPatch[data_, url_] := CurlRequest["PATCH", data, url]
 CurlPut[data_, url_] := CurlRequest["PUT", data, url]
