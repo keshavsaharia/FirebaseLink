@@ -96,4 +96,5 @@ FirebaseRead[secure]
 
 License
 ===
-Do whatever you want with this. Email me a beer if it was helpful: [keshav@keshav.is](mailto:keshav@keshav.is)
+
+DWYWWT (Do What You Want With This)
