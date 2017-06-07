@@ -64,7 +64,9 @@ FirebaseDelete[firebase_, path_] := CurlDelete[FirebaseURL[FirebaseChild[firebas
 
 FirebaseRead[firebase_] := CurlGet[FirebaseURL[firebase]]
 FirebaseRead[firebase_, path_] := CurlGet[FirebaseURL[FirebaseChild[firebase, path]]]
-FirebaseChild[firebase_, child_] := Firebase[FileNameJoin[{First[firebase], child}],Last[firebase]]
+FirebaseChild[firebase_, child_] := FirebaseChild[firebase_, child_] := If[Length[firebase] > 1,
+	Firebase[FileNameJoin[{First[firebase], child}], Last[firebase]],
+	Firebase[FileNameJoin[{First[firebase], child}]]]
 FirebaseParent[firebase_] := Firebase[FileNameDrop[First[firebase], -1],Last[firebase]]
 
 End[];
